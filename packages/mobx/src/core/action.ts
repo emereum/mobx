@@ -147,6 +147,11 @@ export function _endAction(runInfo: IActionRunInfo) {
         spyReportEnd({ time: Date.now() - runInfo.startTime_ })
     }
     globalState.suppressReactionErrors = false
+
+    if (__DEV__ && globalState.trackingDerivation == null && globalState.totalStateChanges === 0) {
+        console.warn("An action did not mutate any observables")
+    }
+    globalState.totalStateChanges = 0
 }
 
 export function allowStateChanges<T>(allowStateChanges: boolean, func: () => T): T {

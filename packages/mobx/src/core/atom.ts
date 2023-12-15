@@ -11,7 +11,8 @@ import {
     propagateChanged,
     reportObserved,
     startBatch,
-    Lambda
+    Lambda,
+    globalState
 } from "../internal"
 
 export const $mobx = Symbol("mobx administration")
@@ -64,6 +65,7 @@ export class Atom implements IAtom {
      * Invoke this method _after_ this method has changed to signal mobx that all its observers should invalidate.
      */
     public reportChanged() {
+        globalState.totalStateChanges++
         startBatch()
         propagateChanged(this)
         endBatch()
